@@ -2,10 +2,13 @@ import express from "express";
 import cron from "node-cron";
 import { retryFailedPayouts } from "./jobs/retryFailedPayouts.js";
 
+import listRoutes from "./routes/skills/list.js";
+import createRoutes from "./routes/skills/create.js";
 import verifyResultRoutes from "./routes/skills/verifyResult.js";
 import checkoutRoutes from "./routes/skills/checkout.js";
 import successRoutes from "./routes/skills/success.js";
 import leaderboardRoutes from "./routes/skills/leaderboard.js";
+import authRoutes from "./routes/auth/register.js";
 import payoutCalculateRoutes from "./routes/creator/payout/calculate.js";
 import payoutExecuteRoutes from "./routes/creator/payout/execute.js";
 import stripeWebhookRoutes from "./routes/webhooks/stripe.js";
@@ -30,10 +33,13 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.use(listRoutes);
+app.use(createRoutes);
 app.use(verifyResultRoutes);
 app.use(checkoutRoutes);
 app.use(successRoutes);
 app.use(leaderboardRoutes);
+app.use(authRoutes);
 app.use(payoutCalculateRoutes);
 app.use(payoutExecuteRoutes);
 app.use(stripeWebhookRoutes);
