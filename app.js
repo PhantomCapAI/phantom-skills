@@ -15,6 +15,7 @@ import stripeWebhookRoutes from "./routes/webhooks/stripe.js";
 import identityRoutes from "./routes/identity.js";
 import cryptoRoutes from "./routes/crypto.js";
 import passportRoutes from "./routes/passport.js";
+import canvasRoutes from "./routes/canvas.js";
 import x402PaidRoutes from "./routes/x402/paid.js";
 import agentRoutes from "./routes/agent.js";
 import { royaltyHeaders, phantomManifest } from "./lib/royalty.js";
@@ -72,6 +73,7 @@ import("./lib/x402.js")
 app.use(identityRoutes);
 app.use(cryptoRoutes);
 app.use(passportRoutes);
+app.use(canvasRoutes);
 
 // Free routes
 app.use(listRoutes);
