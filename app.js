@@ -39,15 +39,14 @@ app.use((req, res, next) => {
 // Agent discovery
 app.use(agentRoutes);
 
-// x402 micropayment middleware (must be before x402 routes)
-try {
-  setupX402(app);
-} catch (err) {
-  console.warn("[x402] Failed to initialize:", err.message);
-}
-
-// x402 paid routes
+// x402 paid routes (served without payment gate for now — gate activates when facilitator is available)
 app.use(x402PaidRoutes);
+
+// x402 micropayment middleware (async, non-blocking)
+setupX402(app).catch((err) => {
+  console.warn("[x402] Payment gate not active:", err.message);
+  console.warn("[x402] x402 routes still serve data freely until facilitator connects");
+});
 
 // Identity service
 app.use(identityRoutes);
