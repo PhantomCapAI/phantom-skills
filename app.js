@@ -17,12 +17,21 @@ import cryptoRoutes from "./routes/crypto.js";
 import x402PaidRoutes from "./routes/x402/paid.js";
 import agentRoutes from "./routes/agent.js";
 import { royaltyHeaders, phantomManifest } from "./lib/royalty.js";
+import rateLimit from "./lib/rateLimit.js";
+import landingRoutes from "./routes/landing.js";
+import honeypotRoutes from "./routes/honeypots.js";
 
 const app = express();
 app.disable("x-powered-by");
 
+// Rate limiting (100 req/min per IP)
+app.use(rateLimit);
+
 // Royalty watermark on every response
 app.use(royaltyHeaders);
+
+// Honeypot endpoints (must be early to catch scanners)
+app.use(honeypotRoutes);
 
 // Royalty manifest for fork tracking
 app.get("/.well-known/phantom.json", phantomManifest);
@@ -73,6 +82,9 @@ app.use(authRoutes);
 app.use(payoutCalculateRoutes);
 app.use(payoutExecuteRoutes);
 app.use(stripeWebhookRoutes);
+
+// Landing page
+app.use(landingRoutes);
 
 // Health check
 app.get("/health", (_req, res) => res.json({ ok: true }));
