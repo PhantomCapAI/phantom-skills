@@ -58,6 +58,32 @@ router.get("/.well-known/agent.json", (_req, res) => {
         description: "Top 10 verified skills ranked by installs.",
       },
     ],
+    identityServices: [
+      {
+        name: "Generate Agent Identity",
+        path: "/identity/generate",
+        method: "POST",
+        description:
+          "Generate Ed25519 keypair for agent identity. Returns public key, private key, fingerprint, and SOUL.md block ready to paste.",
+        free: true,
+      },
+      {
+        name: "Sign Message",
+        path: "/identity/sign",
+        method: "POST",
+        description:
+          "Sign a message with agent private key. Proves identity cryptographically.",
+        free: true,
+      },
+      {
+        name: "Verify Signature",
+        path: "/identity/verify",
+        method: "POST",
+        description:
+          "Verify a signed message against an agent's public key. Confirms identity.",
+        free: true,
+      },
+    ],
     freeEndpoints: [
       { path: "/health", method: "GET", description: "Health check" },
       { path: "/skills", method: "GET", description: "Browse skills (free)" },

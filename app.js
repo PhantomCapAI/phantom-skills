@@ -12,6 +12,7 @@ import authRoutes from "./routes/auth/register.js";
 import payoutCalculateRoutes from "./routes/creator/payout/calculate.js";
 import payoutExecuteRoutes from "./routes/creator/payout/execute.js";
 import stripeWebhookRoutes from "./routes/webhooks/stripe.js";
+import identityRoutes from "./routes/identity.js";
 import x402PaidRoutes from "./routes/x402/paid.js";
 import agentRoutes from "./routes/agent.js";
 import { setupX402 } from "./lib/x402.js";
@@ -47,6 +48,9 @@ try {
 
 // x402 paid routes
 app.use(x402PaidRoutes);
+
+// Identity service
+app.use(identityRoutes);
 
 // Free routes
 app.use(listRoutes);
