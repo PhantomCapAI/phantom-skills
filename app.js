@@ -12,6 +12,9 @@ import authRoutes from "./routes/auth/register.js";
 import payoutCalculateRoutes from "./routes/creator/payout/calculate.js";
 import payoutExecuteRoutes from "./routes/creator/payout/execute.js";
 import stripeWebhookRoutes from "./routes/webhooks/stripe.js";
+import x402PaidRoutes from "./routes/x402/paid.js";
+import agentRoutes from "./routes/agent.js";
+import { setupX402 } from "./lib/x402.js";
 
 const app = express();
 
@@ -32,7 +35,20 @@ app.use((req, res, next) => {
   }
 });
 
-// Routes
+// Agent discovery
+app.use(agentRoutes);
+
+// x402 micropayment middleware (must be before x402 routes)
+try {
+  setupX402(app);
+} catch (err) {
+  console.warn("[x402] Failed to initialize:", err.message);
+}
+
+// x402 paid routes
+app.use(x402PaidRoutes);
+
+// Free routes
 app.use(listRoutes);
 app.use(createRoutes);
 app.use(verifyResultRoutes);
