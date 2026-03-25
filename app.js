@@ -17,6 +17,7 @@ import x402PaidRoutes from "./routes/x402/paid.js";
 import agentRoutes from "./routes/agent.js";
 
 const app = express();
+app.disable("x-powered-by");
 
 // Raw body for webhook signature verification (must come before json parser)
 app.use((req, res, next) => {

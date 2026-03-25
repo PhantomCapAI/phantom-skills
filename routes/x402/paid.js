@@ -3,11 +3,28 @@ import prisma from "../../lib/prisma.js";
 
 const router = Router();
 
-// x402 paid endpoints — these mirror the free endpoints but charge micropayments
-// Agents pay USDC on Solana to access these
+// Gate: x402 payment must have been verified by middleware
+// If middleware didn't run (facilitator down), check for payment header
+function requirePayment(req, res, next) {
+  // x402 middleware sets this when payment is verified
+  if (req.x402?.paid) return next();
+  // Check if payment header was provided (even if middleware didn't verify)
+  const paymentHeader = req.headers["payment-signature"];
+  if (paymentHeader) return next();
+  // No payment — return 402 with instructions
+  return res.status(402).json({
+    error: "Payment required",
+    protocol: "x402",
+    description: "This endpoint requires USDC micropayment via x402 protocol",
+    agent: "https://phantomskills.zeabur.app/.well-known/agent.json",
+    docs: "https://x402.org",
+  });
+}
+
+// x402 paid endpoints — require payment or return 402
 
 // GET /x402/skills — browse (0.1¢ per request)
-router.get("/x402/skills", async (req, res) => {
+router.get("/x402/skills", requirePayment, async (req, res) => {
   try {
     const { search, sort, verified } = req.query;
     const where = {};
@@ -43,7 +60,7 @@ router.get("/x402/skills", async (req, res) => {
 });
 
 // GET /x402/skills/:slug — detail (0.5¢ per request)
-router.get("/x402/skills/:slug", async (req, res) => {
+router.get("/x402/skills/:slug", requirePayment, async (req, res) => {
   try {
     const skill = await prisma.skill.findUnique({
       where: { slug: req.params.slug },
@@ -79,7 +96,7 @@ router.get("/x402/skills/:slug", async (req, res) => {
 });
 
 // GET /x402/skills/:slug/download — download skill files (5¢ per download)
-router.get("/x402/skills/:slug/download", async (req, res) => {
+router.get("/x402/skills/:slug/download", requirePayment, async (req, res) => {
   try {
     const skill = await prisma.skill.findUnique({
       where: { slug: req.params.slug },
@@ -117,7 +134,7 @@ router.get("/x402/skills/:slug/download", async (req, res) => {
 });
 
 // GET /x402/leaderboard — top skills (0.1¢ per request)
-router.get("/x402/leaderboard", async (req, res) => {
+router.get("/x402/leaderboard", requirePayment, async (req, res) => {
   try {
     const skills = await prisma.skill.findMany({
       where: { verified: true },
