@@ -5,6 +5,7 @@
   "description": "Paid skill marketplace for OpenClaw skills",
   "main": "app.js",
   "scripts": {
+    "postinstall": "prisma generate",
     "start": "node app.js",
     "dev": "node --watch app.js"
   },
