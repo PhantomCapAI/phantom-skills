@@ -15,7 +15,6 @@ import stripeWebhookRoutes from "./routes/webhooks/stripe.js";
 import identityRoutes from "./routes/identity.js";
 import x402PaidRoutes from "./routes/x402/paid.js";
 import agentRoutes from "./routes/agent.js";
-import { setupX402 } from "./lib/x402.js";
 
 const app = express();
 
@@ -42,11 +41,13 @@ app.use(agentRoutes);
 // x402 paid routes (served without payment gate for now — gate activates when facilitator is available)
 app.use(x402PaidRoutes);
 
-// x402 micropayment middleware (async, non-blocking)
-setupX402(app).catch((err) => {
-  console.warn("[x402] Payment gate not active:", err.message);
-  console.warn("[x402] x402 routes still serve data freely until facilitator connects");
-});
+// x402 micropayment middleware (lazy load, non-blocking)
+import("./lib/x402.js")
+  .then(({ setupX402 }) => setupX402(app))
+  .then(() => console.log("[x402] Payment gate active"))
+  .catch((err) => {
+    console.warn("[x402] Payment gate not active:", err.message);
+  });
 
 // Identity service
 app.use(identityRoutes);
