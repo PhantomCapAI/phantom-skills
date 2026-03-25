@@ -187,7 +187,7 @@ router.get("/", async (_req, res) => {
     <div class="nav-links">
       <a href="/skills">Skills API</a>
       <a href="/.well-known/agent.json">Agent Discovery</a>
-      <a href="https://github.com/PhoebeBoss/phantom-skills" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/PhantomCapAI/phantom-skills" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 
@@ -200,7 +200,7 @@ router.get("/", async (_req, res) => {
 
   <footer>
     &copy; 2026 Phantom Capital &middot; Phantom Skills &middot;
-    <a href="https://github.com/PhoebeBoss/phantom-skills">Open Source</a>
+    <a href="https://github.com/PhantomCapAI/phantom-skills">Open Source</a>
   </footer>
 </body>
 </html>`);
