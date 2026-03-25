@@ -1,0 +1,20 @@
+{
+  "name": "phantom-skills",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Paid skill marketplace for OpenClaw skills",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node --watch app.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.5.0",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.0",
+    "prisma": "^6.5.0",
+    "stripe": "^17.0.0"
+  }
+}
