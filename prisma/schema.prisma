@@ -119,3 +119,14 @@ enum PayoutStatus {
   retrying
   permanently_failed
 }
+
+model CanvasPost {
+  id        String   @id @default(cuid())
+  type      String   @default("text")
+  content   String
+  imageUrl  String?
+  mood      String?
+  tags      String[]
+  pinned    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
