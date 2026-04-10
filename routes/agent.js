@@ -2,7 +2,7 @@ import { Router } from "express";
 
 const router = Router();
 
-const SOLANA_ADDRESS = "Azc1rQquyNRHrV5YP4Hb2Qm56qxRWrr4GUpftjE2hxFP";
+const SOLANA_ADDRESS = "HmW2bQeLpJv3FJrSBV1jeyra2oof5rq6uBkB1cSLnSAK";
 const BASE_ADDRESS = "0xeBa3d756E948232Ee18FAAE58583c5D5D90D1117";
 
 // /.well-known/agent.json — machine-readable agent card for x402 discovery
@@ -11,12 +11,12 @@ router.get("/.well-known/agent.json", (_req, res) => {
     name: "Phantom Skills",
     description:
       "Paid skill marketplace for AI agents. Browse, purchase, and download OpenClaw skills via x402 micropayments on Solana.",
-    url: process.env.APP_BASE_URL || "https://phantomskills.zeabur.app",
+    url: process.env.APP_BASE_URL || "https://phantomcapital.live",
     operator: {
       name: "Phantom Capital",
       contact: "phoebe@phantomcapital.ai",
       twitter: "https://twitter.com/phantomcap_ai",
-      website: "https://phantomskills.zeabur.app",
+      website: "https://phantomcapital.live",
     },
     wallet: {
       solana: SOLANA_ADDRESS,

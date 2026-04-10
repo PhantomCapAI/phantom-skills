@@ -3,20 +3,28 @@ import prisma from "../../lib/prisma.js";
 
 const router = Router();
 
-// Gate: x402 payment must have been verified by middleware
-// If middleware didn't run (facilitator down), check for payment header
+// Gate: x402 payment must have been cryptographically verified by middleware
+// NEVER trust raw headers alone — only req.x402.paid set by verified middleware
 function requirePayment(req, res, next) {
-  // x402 middleware sets this when payment is verified
+  // x402 middleware sets this ONLY after cryptographic payment verification
   if (req.x402?.paid) return next();
-  // Check if payment header was provided (even if middleware didn't verify)
-  const paymentHeader = req.headers["payment-signature"];
-  if (paymentHeader) return next();
-  // No payment — return 402 with instructions
+
+  // No verified payment — return 402 with payment instructions
   return res.status(402).json({
     error: "Payment required",
     protocol: "x402",
     description: "This endpoint requires USDC micropayment via x402 protocol",
-    agent: "https://phantomskills.zeabur.app/.well-known/agent.json",
+    pricing: {
+      "GET /x402/skills": "$0.001",
+      "GET /x402/skills/:slug": "$0.005",
+      "GET /x402/skills/:slug/download": "$0.05",
+      "GET /x402/leaderboard": "$0.001",
+    },
+    agent: "https://phantomcapital.live/.well-known/agent.json",
+    wallets: {
+      solana: "HmW2bQeLpJv3FJrSBV1jeyra2oof5rq6uBkB1cSLnSAK",
+      evm: "0xeBa3d756E948232Ee18FAAE58583c5D5D90D1117",
+    },
     docs: "https://x402.org",
   });
 }
